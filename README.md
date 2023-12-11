@@ -12,6 +12,7 @@ struct Tree {
 };
 
 // Function to display information about a tree
+
 void displayTree(struct Tree tree) {
 
     printf("Tree at position (%d, %d): %d-year-old, Water Needed: %d liters\n", tree.x, tree.y, tree.age, tree.waterNeeded);
@@ -19,6 +20,7 @@ void displayTree(struct Tree tree) {
 }
 
 // Function to calculate and display the average age of trees
+
 void calculateAverageAge(struct Tree* trees, int n) {
 
     int totalAge = 0;
