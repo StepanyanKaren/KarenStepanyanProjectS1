@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 // Structure to represent a tree
 struct Tree {
     int age;
@@ -13,92 +11,124 @@ struct Tree {
     int y;
 };
 
-
+// Function to display information about a tree
 void displayTree(struct Tree tree) {
 
     printf("Tree at position (%d, %d): %d-year-old, Water Needed: %d liters\n", tree.x, tree.y, tree.age, tree.waterNeeded);
 
 }
+
+// Function to calculate and display the average age of trees
 void calculateAverageAge(struct Tree* trees, int n) {
+
     int totalAge = 0;
-   
+
+    // Calculate the total age of all trees
     for (int i = 0; i < n; ++i) {
+
         totalAge += trees[i].age;
+
     }
 
+    // Calculate the average age
     double averageAge = (double)totalAge / n;
 
+    // Display the average age of trees
     printf("Average Age of Trees: %.2f years\n", averageAge);
+
 }
 
 int main() {
-    int n;   
-    printf("please print the number of trees : ");
+    int n;
+
+    // Get the number of trees from the user
+    printf("Please enter the number of trees: ");
     scanf("%d", &n);
 
-    struct Tree* trees;   
+    struct Tree* trees;
     int garden[20][30];
-    FILE* fptr;    
-    int i;
-    int j; 
+    FILE* fptr;
+
+    // Allocate memory for an array of Tree structures
+    trees = (struct Tree*)malloc(n * sizeof(struct Tree));
+
+    // Open a file for writing binary data
     fptr = fopen("data.txt", "wb");
-    trees = (struct Tree*)malloc(n * sizeof(struct Tree));    
+
+    // Input tree information from the user
     for (int i = 0; i < n; ++i) {
-        printf("Enter age and water, x, y:\n");       
+
+        printf("Enter age, water, x, y for tree N%d:\n", i + 1);
         scanf("%d %d %d %d", &(trees + i)->age, &(trees + i)->waterNeeded, &(trees + i)->x, &(trees + i)->y);
+
     }
 
-    fwrite(trees, sizeof(trees), 8, fptr);   
-    
+    // Write tree data to the file
+    fwrite(trees, sizeof(struct Tree), n, fptr);
+
+    // Close the file
     fclose(fptr);
-    
-    fptr = fopen("data.txt", "rb"); 
-    
-    fread(trees, sizeof(trees), 8, fptr);
-   
-    for (i = 0; i < n; ++i) {
-        
-        printf("age: %d waterneeded: %d, positioin: %d %d", trees[i].age, trees[i].waterNeeded, trees[i].x, trees[i].y);
-  
+
+    // Open the file for reading binary data
+    fptr = fopen("data.txt", "rb");
+
+    // Read tree data from the file
+    fread(trees, sizeof(struct Tree), n, fptr);
+
+    // Display tree information
+    for (int i = 0; i < n; ++i) {
+
+        printf("Age: %d, Water Needed: %d, Position: %d %d\n", trees[i].age, trees[i].waterNeeded, trees[i].x, trees[i].y);
+
     }
-    
+
+    // Close the file
     fclose(fptr);
-    
-    for (i = 0;i < 20;i++) {
-        
-        for (j = 0;j < 30;j++) {
-            
+
+    // Initialize the garden array
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 30; j++) {
+
             garden[i][j] = 0;
-       
+
         }
     }
 
-    for (i = 0; i < n;i++) {
+    // Populate the garden array with tree ages
+    for (int i = 0; i < n; i++) {
+
         garden[trees[i].x][trees[i].y] = trees[i].age;
+
     }
-  
+
     printf("\n");
-   
-    for (i = 0;i < 20;i++) {
-       
-        for (j = 0;j < 30;j++) {
-            
+
+    // Display the garden array
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 30; j++) {
             if (garden[i][j] == 0) {
-               
+
                 printf("  ");
             }
-           
-            else printf(" %d ", garden[i][j]);
-        }      
-        
+            else {
+
+                printf(" %d ", garden[i][j]);
+            }
+        }
+
         printf("\n");
-    }    
-    
+    }
+
+
+    // Calculate and display the average age of trees
     calculateAverageAge(trees, n);
-   
-    printf("Water the trees after 3 days. ");
+
+    printf("Water the trees after 3 days.");
+
+    // Free allocated memory
+    free(trees);
 
 
     return 0;
-}
 
+}
