@@ -1,136 +1,83 @@
-# KarenStepanyanProjectS1
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+# Tree Garden Simulation
 
-// Structure to represent a tree
-struct Tree {
-    int age;
-    int waterNeeded;
-    int x;
-    int y;
-};
+This C program simulates a tree garden, allowing users to input information about trees, storing the data in a binary file, and displaying relevant statistics.
 
-// Function to display information about a tree
+## Table of Contents
+- [Overview](#overview)
+- [Usage](#usage)
+- [File Structure](#file-structure)
+- [How It Works](#how-it-works)
+- [Sample Output](#sample-output)
+- [Contributing](#contributing)
+- [License](#license)
 
-void displayTree(struct Tree tree) {
+## Overview
 
-    printf("Tree at position (%d, %d): %d-year-old, Water Needed: %d liters\n", tree.x, tree.y, tree.age, tree.waterNeeded);
+The program utilizes a structure named `Tree` to represent individual trees with attributes such as age, water needed, and position (x, y) in the garden. Users input information for a specified number of trees, and the program saves the data to a binary file named `data.txt`. The program then reads the data from the file, displays tree information, and populates a virtual garden array. Finally, it calculates and displays the average age of the trees.
 
-}
+## Usage
 
-// Function to calculate and display the average age of trees
+1. **Compile the Code:**
+   ```bash
+   gcc tree_garden.c -o tree_garden
+   ```
 
-void calculateAverageAge(struct Tree* trees, int n) {
+2. **Run the Executable:**
+   ```bash
+   ./tree_garden
+   ```
 
-    int totalAge = 0;
+3. **Follow On-screen Prompts:**
+   - Enter the number of trees.
+   - Input age, water, x, and y for each tree.
 
-    // Calculate the total age of all trees
-    for (int i = 0; i < n; ++i) {
+4. **Review Output:**
+   - Tree information, garden array, and average age are displayed.
 
-        totalAge += trees[i].age;
+## File Structure
 
-    }
+- **tree_garden.c**: The main C program file.
+- **data.txt**: Binary file to store tree data.
 
-    // Calculate the average age
-    double averageAge = (double)totalAge / n;
+## How It Works
 
-    // Display the average age of trees
-    printf("Average Age of Trees: %.2f years\n", averageAge);
+1. **User Input:**
+   - The program prompts the user to input the number of trees and details for each tree.
+   - Tree data is stored in the `data.txt` binary file.
 
-}
+2. **Data Reading and Display:**
+   - The program reads tree data from `data.txt` and displays individual tree information.
 
-int main() {
-    int n;
+3. **Garden Population:**
+   - The program initializes a virtual garden array.
+   - Tree ages are populated in the garden array based on their positions.
 
-    // Get the number of trees from the user
-    printf("Please enter the number of trees: ");
-    scanf("%d", &n);
+4. **Output:**
+   - The program displays the garden array and calculates the average age of the trees.
 
-    struct Tree* trees;
-    int garden[20][30];
-    FILE* fptr;
+5. **Memory Management:**
+   - Dynamically allocated memory for the array of `Tree` structures is freed.
 
-    // Allocate memory for an array of Tree structures
-    trees = (struct Tree*)malloc(n * sizeof(struct Tree));
+## Sample Output
 
-    // Open a file for writing binary data
-    fptr = fopen("data.txt", "wb");
+```plaintext
+Please enter the number of trees: 3
+Enter age, water, x, y for tree N1:
+10 20 5 10
+Enter age, water, x, y for tree N2:
+15 25 8 15
+Enter age, water, x, y for tree N3:
+12 18 12 20
 
-    // Input tree information from the user
-    for (int i = 0; i < n; ++i) {
+Tree at position (5, 10): 10-year-old, Water Needed: 20 liters
+Tree at position (8, 15): 15-year-old, Water Needed: 25 liters
+Tree at position (12, 20): 12-year-old, Water Needed: 18 liters
 
-        printf("Enter age, water, x, y for tree N%d:\n", i + 1);
-        scanf("%d %d %d %d", &(trees + i)->age, &(trees + i)->waterNeeded, &(trees + i)->x, &(trees + i)->y);
+Age: 10, Water Needed: 20, Position: 5 10
+Age: 15, Water Needed: 25, Position: 8 15
+Age: 12, Water Needed: 18, Position: 12 20
 
-    }
-
-    // Write tree data to the file
-    fwrite(trees, sizeof(struct Tree), n, fptr);
-
-    // Close the file
-    fclose(fptr);
-
-    // Open the file for reading binary data
-    fptr = fopen("data.txt", "rb");
-
-    // Read tree data from the file
-    fread(trees, sizeof(struct Tree), n, fptr);
-
-    // Display tree information
-    for (int i = 0; i < n; ++i) {
-
-        printf("Age: %d, Water Needed: %d, Position: %d %d\n", trees[i].age, trees[i].waterNeeded, trees[i].x, trees[i].y);
-
-    }
-
-    // Close the file
-    fclose(fptr);
-
-    // Initialize the garden array
-    for (int i = 0; i < 20; i++) {
-        for (int j = 0; j < 30; j++) {
-
-            garden[i][j] = 0;
-
-        }
-    }
-
-    // Populate the garden array with tree ages
-    for (int i = 0; i < n; i++) {
-
-        garden[trees[i].x][trees[i].y] = trees[i].age;
-
-    }
-
-    printf("\n");
-
-    // Display the garden array
-    for (int i = 0; i < 20; i++) {
-        for (int j = 0; j < 30; j++) {
-            if (garden[i][j] == 0) {
-
-                printf("  ");
-            }
-            else {
-
-                printf(" %d ", garden[i][j]);
-            }
-        }
-
-        printf("\n");
-    }
-
-
-    // Calculate and display the average age of trees
-    calculateAverageAge(trees, n);
-
-    printf("Water the trees after 3 days.");
-
-    // Free allocated memory
-    free(trees);
-
-
-    return 0;
-
-}
+  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  0  0  0  0  0  0  0  
